@@ -2,12 +2,8 @@
 # Exit on error
 set -o errexit
 
-# Build CMS Frontend
-echo "Building Frontend..."
-cd ../frontend
-npm install
-npm run build
-cd ../backend
+# Exit on error
+set -o errexit
 
 # Build Backend
 echo "Building Backend..."

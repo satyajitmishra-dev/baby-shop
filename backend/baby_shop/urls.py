@@ -25,6 +25,4 @@ urlpatterns = [
     path('api/auth/', include('apps.users.urls')),
     path('api/', include('apps.products.urls')),
     path('api/orders/', include('apps.orders.urls')),
-    # Make sure this is the last pattern
-    re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
