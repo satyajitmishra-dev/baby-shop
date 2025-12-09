@@ -1,0 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-premium-cream text-premium-dark font-sans antialiased dark:bg-[#121212] dark:text-gray-100 transition-colors duration-300;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif text-premium-dark dark:text-white;
+  }
+}
+
+@layer components {
+  .glass-nav {
+    @apply sticky top-0 z-50 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-white/20 dark:border-white/5 shadow-sm transition-all duration-300;
+  }
+
+  .btn-primary {
+    @apply px-6 py-3 bg-premium-dark text-white rounded-md font-medium hover:bg-premium-gold hover:text-premium-dark transition-colors duration-300 shadow-md hover:shadow-lg dark:bg-premium-gold dark:text-premium-dark dark:hover:bg-white;
+  }
+
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
