@@ -28,18 +28,17 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-default-key-for-dev')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
+ALLOWED_HOSTS = ['*'] # Allow all hosts for now to make PythonAnywhere setup easier
 
-render_external_hostname = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if render_external_hostname:
-    ALLOWED_HOSTS.append(render_external_hostname)
+# CORS - Allow all for this student project to avoid Vercel domain issues
+CORS_ALLOW_ALL_ORIGINS = True
 
+# CSRF
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://*.pythonanywhere.com"
 ]
-if render_external_hostname:
-    CSRF_TRUSTED_ORIGINS.append(f"https://{render_external_hostname}")
 
 
 # Application definition
