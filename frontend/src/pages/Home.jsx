@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import api from '../api/axios';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import ProductCard from '../components/ProductCard';
@@ -6,12 +7,60 @@ import Footer from '../components/Footer';
 import { PRODUCTS } from '../data/products';
 
 const Home = () => {
+    const [categories, setCategories] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await api.get('/categories/');
+                setCategories(response.data);
+            } catch (error) {
+                console.error("Failed to fetch categories:", error);
+            }
+        };
+        fetchCategories();
+    }, []);
+
     return (
         <div className="min-h-screen bg-white dark:bg-[#121212] transition-colors duration-300">
             <Navbar />
 
             <main>
                 <Hero />
+
+                {/* Collections Section */}
+                {categories.length > 0 && (
+                    <section className="py-16 bg-gray-50 dark:bg-[#181818] transition-colors">
+                        <div className="container-custom">
+                            <h2 className="text-2xl md:text-3xl font-serif font-bold text-center mb-10 text-premium-dark dark:text-white">
+                                Shop by Collection
+                            </h2>
+                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                                {categories.map((cat) => (
+                                    <a key={cat.id} href={`/shop?category=${cat.slug}`} className="group text-center block">
+                                        <div className="relative aspect-square overflow-hidden rounded-full border-4 border-white dark:border-[#2a2a2a] shadow-md group-hover:shadow-lg transition-all duration-300 mb-4 mx-auto w-32 h-32 md:w-40 md:h-40">
+                                            {cat.image ? (
+                                                <img
+                                                    src={cat.image}
+                                                    alt={cat.name}
+                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                />
+                                            ) : (
+                                                <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                                                    <span className="text-2xl">👶</span>
+                                                </div>
+                                            )}
+                                        </div>
+                                        <h3 className="font-medium text-lg text-gray-800 dark:text-gray-200 group-hover:text-premium-gold transition-colors">
+                                            {cat.name}
+                                        </h3>
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    </section>
+                )}
+
 
                 {/* Featured Section */}
                 <section className="py-20 md:py-32">
