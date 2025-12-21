@@ -164,10 +164,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 AUTH_USER_MODEL = 'users.CustomUser'
 
 # CORS
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+# CORS settings are handled at the top of the file (CORS_ALLOW_ALL_ORIGINS = True)
 
 # REST Framework
 REST_FRAMEWORK = {
