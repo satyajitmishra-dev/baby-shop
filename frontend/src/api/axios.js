@@ -1,7 +1,16 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8000/api',
+    baseURL: (() => {
+        const envUrl = import.meta.env.VITE_API_URL;
+        if (!envUrl) return 'http://localhost:8000/api';
+
+        // If it comes from Render's "host" property, it won't have protocol
+        if (!envUrl.startsWith('http')) {
+            return `https://${envUrl}/api`;
+        }
+        return envUrl;
+    })(),
     headers: {
         'Content-Type': 'application/json',
     },

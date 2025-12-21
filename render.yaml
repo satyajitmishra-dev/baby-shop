@@ -46,7 +46,7 @@ services:
         fromService:
           type: web
           name: baby-shop-backend
-          property: url
+          property: host
 
 databases:
   - name: baby-shop-db
