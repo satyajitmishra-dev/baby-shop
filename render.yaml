@@ -1,0 +1,55 @@
+services:
+  # Backend Web Service
+  - type: web
+    name: baby-shop-backend
+    env: python
+    buildCommand: "./backend/build.sh"
+    startCommand: "gunicorn baby_shop.wsgi:application --chdir backend"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+      - key: DB_ENGINE
+        value: postgresql
+      - key: DB_NAME
+        fromDatabase:
+          name: baby-shop-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: baby-shop-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: baby-shop-db
+          property: password
+      - key: DB_HOST
+        fromDatabase:
+          name: baby-shop-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: baby-shop-db
+          property: port
+
+  # Frontend Static Site
+  - type: static
+    name: baby-shop-frontend
+    env: node
+    buildCommand: "cd frontend && npm install && npm run build"
+    publishDir: "frontend/dist"
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          type: web
+          name: baby-shop-backend
+          property: url
+
+databases:
+  - name: baby-shop-db
+    databaseName: babyshop
+    user: babyshop
+    plan: free # Change to 'starter' or higher for production persistence
