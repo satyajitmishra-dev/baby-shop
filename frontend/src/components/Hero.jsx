@@ -14,7 +14,7 @@ const Hero = () => {
                     {/* Content */}
                     <div className="space-y-8 animate-fade-in-up">
                         <span className="inline-block px-4 py-2 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-full text-xs font-semibold tracking-wider text-gray-500 dark:text-gray-400 uppercase shadow-sm">
-                            New Collection 2024
+                            New Collection 2025
                         </span>
                         <h1 className="text-5xl md:text-7xl font-serif font-bold text-premium-dark dark:text-white leading-[1.1]">
                             Gentle Care for <br />

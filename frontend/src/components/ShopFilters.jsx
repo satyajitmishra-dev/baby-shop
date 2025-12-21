@@ -14,7 +14,7 @@ const FilterSection = ({ title, isOpen, toggle, children }) => (
     </div>
 );
 
-const ShopFilters = () => {
+const ShopFilters = ({ selectedCategory, onCategoryChange }) => {
     const [openSections, setOpenSections] = useState({
         category: true,
         price: true,
@@ -25,6 +25,8 @@ const ShopFilters = () => {
         setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
     };
 
+    const categories = ['All', 'Clothing', 'Toys', 'Essentials', 'Care', 'Gear', 'Feeding', 'Furniture', 'Bedding'];
+
     return (
         <div className="w-full">
             <h3 className="text-lg font-serif font-bold mb-6 text-gray-900 dark:text-white">Filters</h3>
@@ -34,10 +36,18 @@ const ShopFilters = () => {
                 isOpen={openSections.category}
                 toggle={() => toggleSection('category')}
             >
-                {['Clothing', 'Toys', 'Essentials', 'Care', 'Gear'].map(cat => (
+                {categories.map(cat => (
                     <label key={cat} className="flex items-center space-x-3 cursor-pointer group">
-                        <input type="checkbox" className="rounded border-gray-300 dark:border-gray-600 text-premium-dark focus:ring-premium-gold bg-transparent dark:bg-gray-800" />
-                        <span className="text-gray-600 dark:text-gray-400 text-sm group-hover:text-premium-dark dark:group-hover:text-white transition-colors">{cat}</span>
+                        <input
+                            type="radio"
+                            name="category"
+                            checked={selectedCategory.toLowerCase() === cat.toLowerCase() || (cat === 'All' && !selectedCategory)}
+                            onChange={() => onCategoryChange(cat === 'All' ? '' : cat)}
+                            className="rounded-full border-gray-300 dark:border-gray-600 text-premium-dark focus:ring-premium-gold bg-transparent dark:bg-gray-800"
+                        />
+                        <span className={`text-sm group-hover:text-premium-dark dark:group-hover:text-white transition-colors ${selectedCategory.toLowerCase() === cat.toLowerCase() ? 'font-medium text-premium-dark dark:text-white' : 'text-gray-600 dark:text-gray-400'}`}>
+                            {cat}
+                        </span>
                     </label>
                 ))}
             </FilterSection>

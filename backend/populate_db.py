@@ -9,11 +9,12 @@ from apps.users.models import CustomUser
 
 def populate():
     # Create Superuser
-    if not CustomUser.objects.filter(email='admin@baby.com').exists():
-        CustomUser.objects.create_superuser('admin', 'admin@baby.com', 'password123')
-        print("Superuser created: admin@baby.com / password123")
+    if not CustomUser.objects.filter(username='admin').exists():
+        if not CustomUser.objects.filter(email='admin@baby.com').exists():
+            CustomUser.objects.create_superuser('admin', 'admin@baby.com', 'password123')
+            print("Superuser created: admin@baby.com / password123")
     else:
-        print("Superuser already exists")
+        print("Superuser 'admin' already exists")
 
     # Create Categories
     from django.core.files.base import ContentFile

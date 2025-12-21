@@ -1,21 +1,44 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Filter, SlidersHorizontal, X } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import ShopFilters from '../components/ShopFilters';
 import api from '../api/axios';
 
 const Shop = () => {
+    const [searchParams, setSearchParams] = useSearchParams();
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [sortBy, setSortBy] = useState('newest');
 
+    // Get category from URL or default to empty
+    const selectedCategory = searchParams.get('category') || '';
+
+    const handleCategoryChange = (category) => {
+        const newParams = new URLSearchParams(searchParams);
+        if (category) {
+            newParams.set('category', category.toLowerCase());
+        } else {
+            newParams.delete('category');
+        }
+        setSearchParams(newParams);
+    };
+
     useEffect(() => {
         const fetchProducts = async () => {
             try {
                 setLoading(true);
-                const response = await api.get('/products/');
+                let url = '/products/';
+                if (selectedCategory) {
+                    url += `?category=${encodeURIComponent(selectedCategory.toLowerCase().trim())}`;
+                }
+
+                console.log("Fetching products from:", url);
+                const response = await api.get(url);
+                console.log("Products response:", response.data);
+
                 setProducts(response.data.results || response.data);
                 setError(null);
             } catch (err) {
@@ -27,7 +50,7 @@ const Shop = () => {
         };
 
         fetchProducts();
-    }, []);
+    }, [selectedCategory]);
 
     const handleSortChange = (e) => {
         setSortBy(e.target.value);
@@ -81,7 +104,10 @@ const Shop = () => {
                     {/* Desktop Sidebar Filters */}
                     <div className="hidden md:block w-64 flex-shrink-0">
                         <div className="sticky top-24">
-                            <ShopFilters />
+                            <ShopFilters
+                                selectedCategory={selectedCategory ? selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1) : ''}
+                                onCategoryChange={handleCategoryChange}
+                            />
                         </div>
                     </div>
 
@@ -131,7 +157,13 @@ const Shop = () => {
                                 <X className="w-6 h-6 text-gray-400" />
                             </button>
                         </div>
-                        <ShopFilters />
+                        <ShopFilters
+                            selectedCategory={selectedCategory ? selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1) : ''}
+                            onCategoryChange={(cat) => {
+                                handleCategoryChange(cat);
+                                // Optional: Keep modal open or close it?
+                            }}
+                        />
                         <div className="mt-8 pt-6 border-t border-gray-100 dark:border-gray-800">
                             <button
                                 className="w-full bg-premium-dark dark:bg-premium-gold text-white dark:text-premium-dark py-3 rounded-lg font-medium"
